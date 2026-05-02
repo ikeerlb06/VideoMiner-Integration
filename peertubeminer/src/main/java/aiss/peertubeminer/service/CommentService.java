@@ -1,4 +1,0 @@
-package aiss.peertubeminer.service;
-
-public class CommentService {
-}
