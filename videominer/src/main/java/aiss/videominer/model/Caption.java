@@ -5,9 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-/**
- * @author Juan C. Alonso
- */
 @Entity
 @Table(name = "Caption")
 public class Caption {

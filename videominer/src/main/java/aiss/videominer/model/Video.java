@@ -7,9 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-/**
- * @author Juan C. Alonso
- */
+
 @Entity
 @Table(name = "Video")
 public class Video {
