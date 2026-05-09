@@ -22,7 +22,10 @@ public class ChannelController {
 
     // Operación POST para añadir un nuevo canal
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Channel create(@RequestBody Channel channel) {
         return repository.save(channel);
     }
+
+}
 }
