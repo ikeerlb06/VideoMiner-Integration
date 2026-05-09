@@ -1,5 +1,6 @@
 package aiss.videominer.controller;
 
+import org.springframework.http.HttpStatus;
 import aiss.videominer.model.Channel;
 import aiss.videominer.repository.ChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,12 @@ public class ChannelController {
         return repository.findAll();
     }
 
+    // Operación GET para buscar un canal específico por su ID
+    @GetMapping("/{id}")
+    public Channel findById(@PathVariable String id) {
+        return repository.findById(id).orElse(null);
+    }
+
     // Operación POST para añadir un nuevo canal
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -27,5 +34,4 @@ public class ChannelController {
         return repository.save(channel);
     }
 
-}
 }
