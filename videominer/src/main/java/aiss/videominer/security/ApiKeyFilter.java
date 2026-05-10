@@ -1,44 +1,29 @@
 package aissvideominer.security;
 
-@Component
-public class ApiKeyFilter extends OncePerRequestFilter {
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
 
-    @Value("${security.api-key}")
+@Component
+public class ApiKeyInterceptor implements HandlerInterceptor {
+    @Value("${videominer.api.key}")
     private String apiKey;
 
-    @Value("${security.api-key-header}")
-    private String apiKeyHeader;
-
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception{
 
-        String path = request.getServletPath();
-
-        return path.startsWith("/swagger-ui") ||
-                path.startsWith("/v3/api-docs");
-    }
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain)
-            throws ServletException, IOException {
-
-        String providedKey = request.getHeader(apiKeyHeader);
-
-        if (!apiKey.equals(providedKey)) {
+        String requestApiKey = request.getHeader("X-API-KEY");
+        if ( requestApiKey !=null && requestApiKey.equals(apiKey)){
+            return true;
+        } else {
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-
-            response.getWriter().write(
-                    "{ \"error\": \"Unauthorized\", " +
-                            "\"message\": \"Missing or invalid API key\" }"
-            );
-
-            return;
+            response.getWriter().write("Error 401:The user is not logged in (API Key no valida o ausente)");
+            return false;
         }
-
-        filterChain.doFilter(request, response);
     }
+
 }
+m

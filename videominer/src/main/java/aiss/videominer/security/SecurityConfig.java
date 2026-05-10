@@ -1,19 +1,22 @@
-
 package aissvideominer.security;
 
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 
 @Configuration
-public class SecurityConfig {
+public class webConfig implements WebMvcConfigurer {
 
-    @Bean
-    public FilterRegistrationBean<ApiKeyFilter> apiKeyFilterRegistration(ApiKeyFilter filter) {
-        FilterRegistrationBean<ApiKeyFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(filter);
-        registration.addUrlPatterns("/*");
-        registration.setOrder(1);
-        return registration;
-    }
+
+    @Autowired
+    private ApiKeyInterceptor apiKeyInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry){
+
+        registry.addInterceptor(apiKeyInterceptor)
+                .addPathPatterns("/videominer/**")
+                .excludePathPatterns("/h2-ui/**");
 }
